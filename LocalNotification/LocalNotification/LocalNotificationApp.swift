@@ -2,7 +2,6 @@
 //  LocalNotificationApp.swift
 //  LocalNotification
 //
-//  Created by Ritwik Singh on 01/12/23.
 //
 
 import SwiftUI
