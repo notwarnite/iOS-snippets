@@ -7,6 +7,82 @@
 
 import SwiftUI
 
+struct ContentView: View {
+    @State private var isProfileExpanded = false
+    @Namespace private var profileAnimation
+    @Namespace private var profileName
+    @Namespace private var profileAvatar
+    @Namespace private var profileJob
+    
+    var body: some View {
+        VStack {
+            if isProfileExpanded {
+                expandedProfileView
+            } else {
+                collapsedProfileView
+            }
+            AnimatedSelector()
+        }
+    }
+    
+    var collapsedProfileView: some View {
+        HStack {
+            profileImage
+                .matchedGeometryEffect(id: profileAvatar, in: profileAnimation)
+                .frame(width: 60, height: 60)
+            
+            VStack(alignment: .leading) {
+                Text("Profile Name")
+                    .font(.title).bold()
+                    .matchedGeometryEffect(id: profileName, in: profileAnimation)
+                
+                Text("iOS Developer")
+                    .foregroundColor(.secondary)
+                    .matchedGeometryEffect(id: profileJob, in: profileAnimation)
+            }
+        
+            
+            Spacer()
+        }
+        .padding()
+    }
+    
+    var expandedProfileView: some View {
+        VStack {
+            profileImage
+                .matchedGeometryEffect(id: profileAvatar, in: profileAnimation)
+                .frame(width: 130, height: 130)
+            
+            VStack {
+                Text("Profile Name")
+                    .font(.title).bold()
+                    .matchedGeometryEffect(id: profileName, in: profileAnimation)
+                
+                Text("iOS Developer")
+                    .foregroundColor(.pink)
+                    .matchedGeometryEffect(id: profileJob, in: profileAnimation)
+                
+                Text("Animated description")
+                    .padding()
+            }
+        }
+        .padding()
+    }
+    
+    var profileImage: some View {
+        Image(systemName: "person")
+            .resizable()
+            .aspectRatio(contentMode: .fill)
+            .clipShape(Circle())
+            .onTapGesture {
+                withAnimation(.spring()) {
+                    isProfileExpanded.toggle()
+                }
+            }
+    }
+
+}
+
 struct AnimatedSelector: View {
     
     let categories: [String] = ["Home", "Movies", "Shows"]
@@ -27,6 +103,7 @@ struct AnimatedSelector: View {
                 }
                 .frame(maxWidth: .infinity)
                 .frame(height: 60)
+                .padding()
                 .onTapGesture {
                     withAnimation {
                         selected = category
@@ -40,5 +117,5 @@ struct AnimatedSelector: View {
 
 
 #Preview {
-    AnimatedSelector()
+    ContentView().preferredColorScheme(.dark)
 }
